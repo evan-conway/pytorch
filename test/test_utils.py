@@ -285,7 +285,7 @@ class TestCheckpoint(TestCase):
             def run_fn(input):
                 return phase2(input)
 
-            state = torch.get_rng_state()
+            state = torch.get_rng_state(device="cpu")
 
             out = phase1(inp)
             out = checkpoint(run_fn, out, use_reentrant=True)
@@ -313,7 +313,7 @@ class TestCheckpoint(TestCase):
             def run_fn(input):
                 return phase2(input)
 
-            state = torch.cuda.get_rng_state()
+            state = torch.get_rng_state(device="cuda")
 
             out = phase1(inp)
             out = checkpoint(run_fn, out, use_reentrant=True)
@@ -559,7 +559,6 @@ class TestCheckpoint(TestCase):
         )
         self.assertTrue("Device types: ['cuda', 'meta']" in warning_msg)
         self.assertTrue("first device type: cuda" in warning_msg)
-
 
 class TestDataLoaderUtils(TestCase):
     MAX_TIMEOUT_IN_SECOND = 300
